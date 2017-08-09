@@ -1,0 +1,26 @@
+{
+  "name": "Messenger",
+  "version": "0.0.1",
+  "description": "This is a little messenger.",
+  "main": "server2.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "DerHerrGammler",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "*",
+    "bootstrap": "*",
+    "compression": "*",
+    "cookies": "^0.7.0",
+    "express": "^4.15.4",
+    "express-sticky-cluster": "*",
+    "ioredis": "^3.1.2",
+    "jquery": "*",
+    "morgan": "*",
+    "mysql": "^2.14.1",
+    "os": "*",
+    "sticky-cluster": "*"
+  }
+}
