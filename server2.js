@@ -87,7 +87,7 @@ require("sticky-cluster")(
                 if (!bcrypt.compareSync(iPassword, sHash)) {
                     res.send("Benutzername oder Passwort falsch!");
                 } else {
-                    func.login(new Cookies (req, res), {
+                    func.login(new cookies (req, res), {
                         "login": true,
                         "userid": results[0].id,
                     });
@@ -129,12 +129,13 @@ require("sticky-cluster")(
 
         // Der Logout
         
-        app.get("/logout", function (req res) {
-            func.logout(new Cookies(req, res), {
-                "sessionid": 
+        app.get("/logout", function (req, res) {
+            var oCookies = cookies(req, res);
+            func.logout(new cookies(req, res), {
+                "sessionid": oCookies.get("MESSENGER")
             });
             res.sendFile(sFileIndex);
-        }
+        });
         
         //************************************************
         // Start server

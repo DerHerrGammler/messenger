@@ -1,0 +1,18 @@
+{
+  "Week"                                        : 604800,
+  "Day"                                         : 86400,
+  "Hour"                                        : 3600,
+  "Minute"                                      : 60,
+  "Second"                                      : 1,
+    
+  "StatusOK"                                    : 1,
+  "StatusERR"                                   : 2,
+    
+  "UserlevelDelete"                             : 0,
+  "UserlevelInaktive"                           : 1,
+  "UserlevelTrail"                              : 2,
+  "UserlevelMember"                             : 3,
+  "UserlevelModerator"                          : 4,
+  "UserlevelSupermoderator"                     : 5,
+  "UserlevelAdministrator"                      : 6
+}

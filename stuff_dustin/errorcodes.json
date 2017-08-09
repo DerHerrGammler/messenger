@@ -1,0 +1,12 @@
+{
+    "ERR_invalidCommand": 0,
+    "ERR_missingParameters": 1,
+    "ERR_checkRequiredValues": 2,
+    "ERR_getImageInfo": 3,
+    "ERR_imageResize": 4,
+    "ERR_invalidUserlevel": 5,
+    "ERR_sqlfetcherror": 6,
+    "ERR_indiviudalerror": 7,
+    "OK_templateCreated": 10,
+    "OK_exitcain": 11
+}

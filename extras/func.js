@@ -56,14 +56,16 @@ exports.login = function (oCookie, oOption) {
 }
 
 exports.logout = function (oCookie, oOption) {
-    if (oOption.sSessionid)
+    if (oOption.sSessionid !== undefined) {
+        oCookie.set("MESSENGER");
+    }
 }
 
 exports.loggedin = function () {
     
 }
 
-exports.randomString = function (iLength, sChars, oOption) {
+exports.randomString = function (iLength, sChars, oOptions) {
     var sMask = "";
     var sResult = "";
     var iMaskLength = 0;
