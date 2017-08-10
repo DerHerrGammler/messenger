@@ -80,7 +80,7 @@ require("sticky-cluster")(
             var iPassword = req.body.inputPW;
             var sQuery = "SELECT * FROM userdata WHERE username = \"" + user + "\";";
             
-            connection.query(sQuery, function(error, results, fields){ //Passwortüberprüfung
+            connection.query(sQuery, function (error, results, fields){ //Passwortüberprüfung
                 if (error) throw error;
                 console.log('The solution is: ', results[0].user_password);
                 var sHash = results[0].user_password;
@@ -94,6 +94,31 @@ require("sticky-cluster")(
                     res.sendFile(sFileNachrichten);
                 }
             });
+        });
+        
+        app.get("/messenger", function (req, res) {
+            func.loggedin(new cookies (req, res), function (iUserid) {
+                console.log(iUserid);
+                if (iUserid > -1) {
+                    console.log(iUserid);
+                    res.sendFile(sFileNachrichten);
+                    var sQuery = "SELECT * FROM userdata WHERE id = " + iUserid + ";";
+                    connection.query(sQuery, function (error, result, fields) {
+                        console.log("Hallo User " + result[0].username + "! Du hast die UserID " + iUserid + "!");
+                    });
+                } else {
+                    res.sendFile(sFileIndex);
+                }
+            });
+        });
+        
+        // Der Logout
+        app.get("/logout", function (req, res) {
+            var oCookies = cookies(req, res);
+            func.logout(new cookies(req, res), {
+                "sessionid": oCookies.get("MESSENGER")
+            });
+            res.sendFile(sFileIndex);
         });
         
             //************************************************
@@ -121,22 +146,11 @@ require("sticky-cluster")(
                 var salt = bcrypt.genSaltSync(10); // Passwort verschlüsseln
                 var hash = bcrypt.hashSync( iPassword, salt);
                 var sQuery = "INSERT INTO userdata ( username, user_password, user_email ) VALUES ( \"" + user + "\", \"" + hash + "\", \"" + email + "\");" // Einfügen der Daten in eine Userdatenbank
-                console.log(sQuery);
                 connection.query(sQuery);
                 res.sendFile(sFileLogin);
             }
         });
 
-        // Der Logout
-        
-        app.get("/logout", function (req, res) {
-            var oCookies = cookies(req, res);
-            func.logout(new cookies(req, res), {
-                "sessionid": oCookies.get("MESSENGER")
-            });
-            res.sendFile(sFileIndex);
-        });
-        
         //************************************************
         // Start server
         //************************************************
@@ -152,4 +166,4 @@ require("sticky-cluster")(
 // Benutzername MySQL: messenger
 // PW-datenbank MySQL: Anp82iVRWHEyaEn1
 
-// TestUser-PW: DeineMudda123!
+// TestUser-Name/PW: DeineMudda123!

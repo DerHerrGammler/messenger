@@ -3,7 +3,9 @@
 // Module dependencies
 
 var cookies = require("cookies");
+var Redis = require("ioredis");
 
+var redis = new Redis();
 
 //****************************************
 // function
@@ -52,17 +54,30 @@ exports.login = function (oCookie, oOption) {
             "overwrite": true,
             "httpOnly": true,
         });
+        redis.set(sSessionid, oOption.userid);
+        redis.get(sSessionid, function (error, result) {
+            console.log("RESULT: " + result);
+        });
     }
 }
 
 exports.logout = function (oCookie, oOption) {
-    if (oOption.sSessionid !== undefined) {
-        oCookie.set("MESSENGER");
+    if (oOption.sessionid !== undefined) {
+        redis.del(oOption.sSessionid, function () {
+            oCookie.set("MESSENGER")
+        }) ;
     }
 }
 
-exports.loggedin = function () {
-    
+exports.loggedin = function (oCookie, fCallback) {
+    var bReturn = -1;
+    var sSessionid = oCookie.get("MESSENGER");
+    redis.get(sSessionid, function (error, result) {
+        if (!error && result !== null) {
+            bReturn = result;
+        }
+        fCallback(bReturn);
+    });
 }
 
 exports.randomString = function (iLength, sChars, oOptions) {
