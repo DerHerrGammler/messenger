@@ -52,7 +52,7 @@ require("sticky-cluster")(
         app.get("/login", function (req, res) {
             site.login(req, res);
         });
-        app.post("/loginUser", function (req, res) { //Start des Einloggen
+        app.post("/loginUser", function (req, res) {
             site.loginUser(req, res);
         });
         app.get("/messenger", function (req, res) {
@@ -64,8 +64,11 @@ require("sticky-cluster")(
         app.get("/register", function (req, res) {
             site.register(req, res);
         });
-        app.post("/newUser", function (req, res) { //Start der Werteprüfung
+        app.post("/newUser", function (req, res) {
             site.newUser(req, res);
+        });
+        app.get("/newMessage", function (req, res) { //in bearbeitung (siehe sites.js)
+            site.newMessage(req, res);
         });
 
         //************************************************

@@ -41,17 +41,20 @@ exports.register = function (req, res) {
 
 exports.messenger = function (req, res) {
     func.loggedin(new cookies (req, res), function (iUserid) {
-        console.log(iUserid);
         if (iUserid > -1) {
             res.sendFile(sFileNachrichten);
             var sQuery = "SELECT * FROM userdata WHERE id = " + iUserid + ";";
             connection.query(sQuery, function (error, result, fields) {
-                console.log("Hallo User " + result[0].username + "! Du hast die UserID " + iUserid + "!");
+                console.log("SYSTEM: Hallo User " + result[0].username + "! Du hast die UserID " + iUserid + "!");
             });
         } else {
             func.route(res, "/home");
         }
     });
+}
+
+exports.newMessage = function (req, res) { //in Bearbeitung
+    res.sendFile();
 }
 
 // functional sites
@@ -88,7 +91,6 @@ exports.loginUser = function (req, res) {
 
     connection.query(sQuery, function (error, results, fields){ //Passwortüberprüfung
         if (error) throw error;
-        console.log('The solution is: ', results[0].user_password);
         var sHash = results[0].user_password;
         if (!bcrypt.compareSync(iPassword, sHash)) {
             res.send("Benutzername oder Passwort falsch!");

@@ -5,14 +5,17 @@
         <title>Home</title>
         <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
         <link rel="stylesheet" href="./css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="./jquery/index.css">
     </head>
     <body style="background:#006600">
         <div class="container" style="margin-top:50px">
             <div class="row" style="background:#00bb00">
                 <div class="col-md-12" style="margin-top:25px">
                     <p class="text-center">
-                        <img src="./images/gammler.jpg" class="img-thumbnail img-responsive" alt="Thumbnail Image" width="300">
+                        <img src="./images/gammler.jpg" class="img-thumbnail img-responsive picture" alt="Thumbnail Image" width="300">
+                        <img src="./images/gammler2.jpg" class="img-thumbnail img-responsive just-hidden right picture" alt="Alternativ Thumbnail Image" width="300">
                     </p>
+                    <p class="text-center face just-hidden">!!!This is the hidden Face under the Face!!!</p>
                 </div>
                 <div class="col-md-12">
                     <h2 class="text-center"><ins>Wilkommen bei unserem Messenger</ins></h2>
@@ -21,21 +24,25 @@
                 <div class="col-md-3"></div>
                 <div class="col-md-3">
                     <p class="text-center">
-                    <form method="get" action="/login">
+                    <a href="/login">
                         <button type="submit" class="btn btn-primary btn-block">Login</button>
-                    </form>
+                    </a>
                     </p>
                 </div>
                 <div class="col-md-3">
                     <p class="text-center">
-                    <form method="get" action="/register">
+                    <a href="/register">
                         <button type="submit" class="btn btn-primary btn-block">Registrieren</button>
-                    </form>
+                    </a>
                     </p>
                 </div>
                 <div class="col-md-3"></div>
                 <div class="col-md-12">
-                    <a href="/messenger"> tollasfgsafgsfdasdfsdafda </a>
+                    <p class="text-center">
+                        <a href="/messenger">
+                            <button class="btn btn-primary">Nachrichten</button>
+                        </a>
+                    </p>
                 </div>
                 <div class="col-md-12">
                     <p class="text-right">&copy DerHerrGammler</p>
@@ -44,5 +51,6 @@
         </div>
         <script src="./js/jquery.min.js"></script>
         <script src="./js/bootstrap.min.js"></script>
+        <script src="./jquery/index.js"></script>
     </body>
 </html>
