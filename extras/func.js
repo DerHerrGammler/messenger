@@ -55,17 +55,18 @@ exports.login = function (oCookie, oOption) {
             "httpOnly": true,
         });
         redis.set(sSessionid, oOption.userid);
-        redis.get(sSessionid, function (error, result) {
-            console.log("RESULT: " + result);
-        });
     }
 }
 
 exports.logout = function (oCookie, oOption) {
     if (oOption.sessionid !== undefined) {
-        redis.del(oOption.sSessionid, function () {
-            oCookie.set("MESSENGER")
-        }) ;
+        /* old code  !!!FEHLERMELDUNG und cookie wird nicht entfernt!!!
+        redis.del(oOption.sessionid, function() {
+            oCookie.set("MESSENGER");
+        });
+        */
+        redis.del(oOption.sessionid);
+        oCookie.set("MESSENGER");
     }
 }
 
@@ -116,3 +117,7 @@ exports.randomString = function (iLength, sChars, oOptions) {
     }
     return sResult;
 };
+
+exports.route = function (res, sRoute) {
+    res.redirect(sRoute);
+}
