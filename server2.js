@@ -10,13 +10,14 @@ require("sticky-cluster")(
         //************************************************
         // Module dependencies
         //************************************************
+        var http = require("http");
         var express = require("express");
         var compress = require("compression");
         var http = require("http");
         var morgan = require("morgan");
         var bodyParser = require("body-parser");
         
-        var site = require("./extras/sites.js");
+        var site = require("./extras/sites");
 
         //************************************************
         // Configuration
