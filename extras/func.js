@@ -121,3 +121,7 @@ exports.randomString = function (iLength, sChars, oOptions) {
 exports.route = function (res, sRoute) {
     res.redirect(sRoute);
 }
+
+exports.unixInt = function () {
+    return Math.floor(Date.now() / 1000);
+};

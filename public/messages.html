@@ -9,13 +9,27 @@
     </head>
     <body style="background:#006600">
         <div class="container" style="margin-top:20px">
+            <div class="row" style="background:#0b0; color:#f5f">
+                <ul class="nav nav-tabs">
+                    <li role="presentation" class="active">
+                        <a id="link-transmit">Gesendet</a>
+                    </li>
+                    <li role="presentation" class="">
+                        <a id="link-receive">Empfangen</a>
+                    </li>
+                    <li role="presentation" class="">
+                        <a id="link-newMessage">Neue Nachricht</a>
+                    </li>
+                </ul>
+            </div>
             <div class="row">
-                <div class="col-md-6 transmit" style="background:#00aa00">
+                <div class="col-md-12 transmit" style="background:#00bb00">
                     <h1>Gesendete Nachrichten</h1>
                     <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th>VON</th>
+                                <th>DATUM</th>
                                 <th>NACHRICHT</th>
                             </tr>
                         </thead>
@@ -23,30 +37,46 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="col-md-6 receiv" style="background:#00bb00">
+                <div class="col-md-12 receive opacity" style="background:#00bb00">
                     <h1>Empfangene Nachrichten</h1>
                     <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th>AN</th>
+                                <th>DATUM</th>
                                 <th>NACHRICHT</th>
                             </tr>
                         </thead>
                         <tbody>
                         </tbody>
                     </table>
+                </div>
+                <div class="col-md-12 newMessage opacity" style="background:#00bb00">
+                    <form action="/newMessage" method="post">
+                        <legend>
+                            <h1>Neue Nachricht schreiben</h1>
+                        </legend>
+                        <div class="form-group">
+                            <label for="inputReceiver">Empfänger</label>
+                            <input type="text" class="form-control" id="inputReceiver" name="inputReceiver">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputMessage">Nachricht</label>
+                            <textarea type="text" class="form-control" id="inputMessage" name="inputMessage" rows="5"></textarea>
+                        </div>
+                        <p class="text-right">
+                            <button type="submit" class="btn btn-primary">Senden</button>
+                        </p>
+                    </form>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12" style="margin-top:20px">
                     <p class="text-right">
                         <a href="/home">
-                            <button class="btn btn-primary">Hauptseite</button>
+                            <button class="btn btn-primary">Home</button>
                         </a>
                         <button class="btn btn-primary update">Aktualisieren</button>
-                        <a href="/newMessage">
-                            <button class="btn btn-primary">Neue nachricht schreiben</button>
-                        </a>
                         <a href="/logout">
                             <button class="btn btn-primary">Logout</button>
                         </a>

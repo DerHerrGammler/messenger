@@ -1,42 +1,103 @@
 
-function getMessage (iArray) {
-    console.log(iArray)
-}
+function updateTransmitMessages () {
+    $.getJSON("/updateTransmitMessages", function (aTransmit) {
+        console.log(aTransmit[0]);
+        console.log(aTransmit.length);
+        
+        var iMessage = aTransmit.length;
+        while (iMessage > 0) {
+            iMessage--;
+            var to = aTransmit[iMessage].Sender;
+            var date = aTransmit[iMessage].Datum;
+            var note = aTransmit[iMessage].Nachricht;
+            console.log(to);
+            console.log(date);
+            console.log(note);
+            var message = "<tr><td>" + to + "</td><td>" + date + "</td><td>" + note + "</td></tr>";
+            $(".transmit").find("tbody").append($(message));
+        }
+    });
+};
+
+function updateReceiveMessages () {
+    $.getJSON("/updateReceiveMessages", function (aReceive) {
+        console.log(aReceive[0]);
+        console.log(aReceive.length);
+        
+        var iMessage = aReceive.length;
+        while (iMessage > 0) {
+            iMessage--;
+            var by = aReceive[iMessage].Empfänger;
+            var date = aReceive[iMessage].Datum;
+            var note = aReceive[iMessage].Nachricht;
+            console.log(by);
+            console.log(date);
+            console.log(note);
+            var message = "<tr><td>" + by + "</td><td>" + date + "</td><td>" + note + "</td></tr>";
+            $(".receive").find("tbody").append($(message));
+        }
+    });
+};
+
+function takeTransmit () {
+    if ($(".transmit").hasClass("opacity")) {
+        $("#link-transmit").parents().toggleClass("active");
+        $(".transmit").toggleClass("opacity");
+    }
+    if (!$(".receive").hasClass("opacity")) {
+        $("#link-receive").parents().toggleClass("active");
+        $(".receive").toggleClass("opacity");
+    }
+    if(!$(".newMessage").hasClass("opacity")) {
+        $("#link-newMessage").parents().toggleClass("active");
+        $(".newMessage").toggleClass("opacity");
+    }
+};
+
+function takeReceive () {
+    if (!$(".transmit").hasClass("opacity")) {
+        $("#link-transmit").parents().toggleClass("active");
+        $(".transmit").toggleClass("opacity");
+    }
+    if ($(".receive").hasClass("opacity")) {
+        $("#link-receive").parents().toggleClass("active");
+        $(".receive").toggleClass("opacity");
+    }
+    if(!$(".newMessage").hasClass("opacity")) {
+        $("#link-newMessage").parents().toggleClass("active");
+        $(".newMessage").toggleClass("opacity");
+    }
+};
+
+function takeNewMessage () {
+    if (!$(".transmit").hasClass("opacity")) {
+        $("#link-transmit").parents().toggleClass("active");
+        $(".transmit").toggleClass("opacity");
+    }
+    if (!$(".receive").hasClass("opacity")) {
+        $("#link-receive").parents().toggleClass("active");
+        $(".receive").toggleClass("opacity");
+    }
+    if($(".newMessage").hasClass("opacity")) {
+        $("#link-newMessage").parents().toggleClass("active");
+        $(".newMessage").toggleClass("opacity");
+    }
+};
 
 $(document).ready(function () {
-    var iNachG = 4
-    var iNachE = 7
-    
-    var von = "DieFrauGammler";
-    var an = "DieFrauGammler";
-    var note1 = "Das essen war lecker, aber ich denke das nächste mal sollte ich wieder kochen. Etwas anbrennen lassen hast du es ja doch irgendwie!!";
-    var note2 = "JAJA!!! Du kannst mich mal!! Wenn dir mein essen nicht gefällt, dann sich dir doch nen anderen der für dich kocht.";
-    
     $(".update").on("click", function() {
-        var iNG = 0;
-        var iNE = 0;
-        $(".transmit").find("h1").text("Gesendete Nachrichten: " + iNachG);
-        while (iNG < iNachG) {
-            getMessage(iNG);
-            iNG++
-            $(".transmit").find("tbody").append($("<tr><td>" + an + "</td><td>" + note1 +"</td></tr>"));
-        }
-        $(".receiv").find("h1").text("Empfangene Nachrichten: " + iNachE);
-        while (iNE < iNachE) {
-            iNE++
-            $(".receiv").find("tbody").append($("<tr><td>" + von + "</td><td>" + note2 + "</td></tr>"));
-        }
+        $("tbody").empty();
+        updateTransmitMessages();
+        updateReceiveMessages();
+    });
+    $("#link-transmit").on("click", function() {
+        takeTransmit();
+    });
+    $("#link-receive").on("click", function() {
+        takeReceive();
+    });
+    $("#link-newMessage").on("click", function() {
+        takeNewMessage();
     });
 });
 
-/*
-über eine funktion die nachrichten daten aus der datenbank bekommen und dann hinzufügen lassen
-
-funktion zur überprüfung wie viele nachrichten es gibt
-
-Nachrichten als tabelle anzeigen!!!! und tabellen items hinzufügen statt normalen <p>
-anzeige wie viele neue nachrichten bzw nachrichten
-ganze  mit if-clause lösen
--> solange nachrichtenmegne < 10 weiter nachrichten laden
--> solange aus dem result der datenbank kein error kommt nen array weiter erhöhen und so alle nachrichten laden
-*/

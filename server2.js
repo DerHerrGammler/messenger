@@ -68,8 +68,14 @@ require("sticky-cluster")(
         app.post("/newUser", function (req, res) {
             site.newUser(req, res);
         });
-        app.get("/newMessage", function (req, res) { //in bearbeitung (siehe sites.js)
+        app.post("/newMessage", function (req, res) { //in bearbeitung
             site.newMessage(req, res);
+        });
+        app.get("/updateTransmitMessages", function (req, res) { //in bearbeitung
+            site.updateTransmitMessages(req, res);
+        });
+        app.get("/updateReceiveMessages", function (req, res) { //in bearbeitung
+            site.updateReceiveMessages(req, res);
         });
 
         //************************************************
