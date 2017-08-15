@@ -107,68 +107,89 @@ exports.logout = function (req, res) {
     func.route(res, "/../home");
 };
 
-exports.newMessage = function (req, res) { //in Bearbeitung
+exports.newMessage = function (req, res) {
     var sReceiver = req.body.inputReceiver;
     var sMessage = req.body.inputMessage;
-    func.loggedin(new cookies (req, res), function (iSender) {
-        var sQueryReceiver = "SELECT * FROM userdata WHERE LOWER(username) = LOWER(\"" + sReceiver + "\");";
-        connection.query(sQueryReceiver, function (error, result, fields) {
-            console.log("ERROR? :      " + error);
-            if (!error) {
-                var iReceiver = result[0].id;
-                var iUnixtime = func.unixInt();
-                var sStat = "Gesendet";
-                var sQuery = "INSERT INTO message ( sender_id, receiver_id, unixtime, message, stat ) VALUES ( " + iSender + ", " + iReceiver + ", " + iUnixtime + ", \"" + sMessage + "\", \"" + sStat + "\");";
-                connection.query(sQuery);
-                func.route(res, "/messenger");
-            } else {
-                console.log("leck mich am arsch du behindertes scheiß programm hergott nochmal du kannst mich mal");
-                func.route(res, "/home");
+    if (sMessage.length !== 0) {
+        if (sMessage.length < 1000) {
+            func.loggedin(new cookies (req, res), function (iSender) {
+                var sQueryReceiver = "SELECT * FROM userdata WHERE LOWER(username) = LOWER(\"" + sReceiver + "\");";
+                connection.query(sQueryReceiver, function (error, result, fields) {
+                    console.log("ERROR? :      " + error);
+                    if (result[0] !== undefined) {
+                        var iReceiver = result[0].id;
+                        var iUnixtime = func.unixInt();
+                        var sStat = "Gesendet";
+                        var sQuery = "INSERT INTO message ( sender_id, receiver_id, unixtime, message, stat ) VALUES ( " + iSender + ", " + iReceiver + ", " + iUnixtime + ", \"" + sMessage + "\", \"" + sStat + "\");";
+                        connection.query(sQuery);
+                        func.route(res, "/messenger/send");
+                    } else {
+                        console.log("ERROR 404: Fehler in der Datenbank!")
+                        func.route(res, "/messenger/error404");
+                    }
+                });
+            });
+        } else {
+            console.log("ERROR 414: Nachricht zu lang.");
+            func.route(res, "/messenger/error414");
+        }
+    } else {
+        console.log("ERROR 122: Nachricht zu kurz.");
+        func.route(res, "/messenger/error122");
+    }
+};
+
+exports.updateTransmitMessages = function (req, res) {
+    func.loggedin(new cookies (req, res), function(iUser) {
+        var aTransmit = [];
+        var sQuery = "SELECT * FROM message INNER JOIN userdata ON userdata.id = message.receiver_id WHERE sender_id = " + iUser + ";";
+        connection.query(sQuery, function (error, result, fields) {
+            var iResultLenght = result.length;
+            while (iResultLenght > 0) {
+                iResultLenght--;
+                var sReceiver = result[iResultLenght].username;
+                var sMessage = result[iResultLenght].message;
+                var sStatus = result[iResultLenght].stat;
+                var iDate = result[iResultLenght].unixtime;
+                var sDate = func.unixDate(iDate);
+                var oMessage = {
+                    "empfaenger"    : sReceiver,
+                    "nachricht"     : sMessage,
+                    "status"        : sStatus,
+                    "datum"         : sDate
+                }
+                aTransmit.push(oMessage);
             }
+            res.json(aTransmit);
         });
     });
 };
 
-exports.updateTransmitMessages = function (req, res) { //in bearbeitung
-
-    var aTransmit = [{
-        "Sender"    : "DieFrauGammler",
-        "Empfänger" : "DerHerrGammler",
-        "Nachricht" : "Stuff, Stuff, Stuff, Stuff, Stuff, Stuff, Stuff, Stuff",
-        "Status"    : "Gelesen",
-        "Datum"     : "19:22"
-    }, {
-        "Sender"    : "DasEtwasGammler",
-        "Empfänger" : "DerHerrGammler",
-        "Nachricht" : "Viel mehr stuff als vorher!!!",
-        "Status"    : "Gelesen",
-        "Datum"      : "19:22"
-    }, {
-        "Sender"    : "DieFrauGammler",
-        "Empfänger" : "DerHerrGammler",
-        "Nachricht" : "Hier kommt ein ganz toller und möglichst lanbger satz ohne punkt und komma den du niemals lesen wirst weil es nur ein test ist was es denn macht wenn der satz ganz lang ist toll oder !!!!",
-        "Status"    : "Gelesen",
-        "Datum"     : "19:22"
-    }];
-    res.json(aTransmit);
-};
-
-exports.updateReceiveMessages = function (req, res) { //in bearbeitung
-
-    var aReceive = [{
-        "Sender"    : "DieFrauGammler",
-        "Empfänger" : "DerHerrGammler",
-        "Nachricht" : "Stuff, Stuff, Stuff, Stuff, Stuff, Stuff, Stuff, Stuff",
-        "Status"    : "Gelesen",
-        "Datum"     : "19:22"
-    }, {
-        "Sender"    : "DasEtwasGammler",
-        "Empfänger" : "DerHerrGammler",
-        "Nachricht" : "Viel mehr stuff als vorher!!!",
-        "Status"    : "Gelesen",
-        "Datum"     : "19:22"
-    }];
-    res.json(aReceive);
+exports.updateReceiveMessages = function (req, res) {
+    func.loggedin(new cookies (req, res), function(iUser) {
+        var aTransmit = [];
+        var sQuery = "SELECT * FROM message INNER JOIN userdata ON userdata.id = message.sender_id WHERE receiver_id = " + iUser + ";";
+        console.log(sQuery);
+        connection.query(sQuery, function (error, result, fields) {
+            var iResultLenght = result.length;
+            while (iResultLenght > 0) {
+                iResultLenght--;
+                var sReceiver = result[iResultLenght].username;
+                var sMessage = result[iResultLenght].message;
+                var sStatus = result[iResultLenght].stat;
+                var iDate = result[iResultLenght].unixtime;
+                var sDate = func.unixDate(iDate);
+                var oMessage = {
+                    "empfaenger"    : sReceiver,
+                    "nachricht"     : sMessage,
+                    "status"        : sStatus,
+                    "datum"         : sDate
+                }
+                aTransmit.push(oMessage);
+            }
+            res.json(aTransmit);
+        });
+    });
 };
 
 

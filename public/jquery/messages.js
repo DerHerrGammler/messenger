@@ -1,19 +1,15 @@
 
 function updateTransmitMessages () {
     $.getJSON("/updateTransmitMessages", function (aTransmit) {
-        console.log(aTransmit[0]);
-        console.log(aTransmit.length);
-        
         var iMessage = aTransmit.length;
-        while (iMessage > 0) {
-            iMessage--;
-            var to = aTransmit[iMessage].Sender;
-            var date = aTransmit[iMessage].Datum;
-            var note = aTransmit[iMessage].Nachricht;
-            console.log(to);
-            console.log(date);
-            console.log(note);
-            var message = "<tr><td>" + to + "</td><td>" + date + "</td><td>" + note + "</td></tr>";
+        var n = -1;
+        $(".transmit").find("h1").text(iMessage + " Gesendete Nachrichten");
+        while (iMessage - 1 > n) {
+            n++;
+            var to = aTransmit[n].empfaenger;
+            var date = aTransmit[n].datum;
+            var note = aTransmit[n].nachricht;
+        var message = "<tr><td>" + to + "</td><td class=\"date\">" + date + "</td><td class=\"trennung\">" + note + "</td></tr>";
             $(".transmit").find("tbody").append($(message));
         }
     });
@@ -21,19 +17,15 @@ function updateTransmitMessages () {
 
 function updateReceiveMessages () {
     $.getJSON("/updateReceiveMessages", function (aReceive) {
-        console.log(aReceive[0]);
-        console.log(aReceive.length);
-        
         var iMessage = aReceive.length;
-        while (iMessage > 0) {
-            iMessage--;
-            var by = aReceive[iMessage].Empfänger;
-            var date = aReceive[iMessage].Datum;
-            var note = aReceive[iMessage].Nachricht;
-            console.log(by);
-            console.log(date);
-            console.log(note);
-            var message = "<tr><td>" + by + "</td><td>" + date + "</td><td>" + note + "</td></tr>";
+        var n = -1;
+        $(".receive").find("h1").text(iMessage + " Empfangene Nachrichten");
+        while (iMessage - 1 > n) {
+            n++;
+            var by = aReceive[n].empfaenger;
+            var date = aReceive[n].datum;
+            var note = aReceive[n].nachricht;
+            var message = "<tr><td>" + by + "</td><td class=\"date\">" + date + "</td><td class=\"trennung\">" + note + "</td></tr>";
             $(".receive").find("tbody").append($(message));
         }
     });
@@ -84,11 +76,18 @@ function takeNewMessage () {
     }
 };
 
+function update () {
+    $("tbody").empty();
+    updateReceiveMessages();
+    updateTransmitMessages();
+};
+
+
+
 $(document).ready(function () {
+    update();
     $(".update").on("click", function() {
-        $("tbody").empty();
-        updateTransmitMessages();
-        updateReceiveMessages();
+        update();
     });
     $("#link-transmit").on("click", function() {
         takeTransmit();
@@ -98,6 +97,30 @@ $(document).ready(function () {
     });
     $("#link-newMessage").on("click", function() {
         takeNewMessage();
+    });
+    if ($(location).attr("pathname") === "/messenger/error404") {
+        alert("User nicht gefunden. Bitte prüfen Sie den Usernamen.");
+    }
+    if ($(location).attr("pathname") === "/messenger/error122") {
+        alert("Bitte schreiben Sie eine Nachricht. Leere Nachrichten können nicht übermittelt werden.");
+    }
+    if ($(location).attr("pathname") === "/messenger/error414") {
+        alert("Ihre eingegebene Nachricht hat die Maximallänge von 999 Zeichen überschritten. Bitte fassen Sie sich kürzer.");
+    }
+    if ($(location).attr("pathname") === "/messenger/send") {
+        alert("Ihr Nachricht wurde erfolgreich versand.")
+    }
+    $("#inputMessage").on("keyup", function () {
+        var sMessage = $("#inputMessage").val()
+        var iMessageLenght = sMessage.length;
+        var iMaxLenght = $("#chars").data();
+        var iChar = iMaxLenght.value - iMessageLenght;
+        if (iChar < 0) {
+            $("#chars").addClass("warning");
+        } else {
+            $("#chars").removeClass("warning");
+        }
+        $("#chars").text(iChar + " Zeichen Über");
     });
 });
 

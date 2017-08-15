@@ -3,3 +3,14 @@
   display: none;
 }
 
+.warning {
+  color: #ff0000;
+}
+
+.date {
+  white-space: nowrap;
+}
+
+.trennung {
+  hyphens: auto;
+}

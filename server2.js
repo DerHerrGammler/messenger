@@ -59,6 +59,9 @@ require("sticky-cluster")(
         app.get("/messenger", function (req, res) {
             site.messenger(req, res);
         });
+        app.get("/messenger/*", function (req, res) {
+            site.messenger(req, res);
+        });
         app.get("/logout", function (req, res) {
             site.logout(req, res);
         });

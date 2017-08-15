@@ -5,6 +5,8 @@
 var cookies = require("cookies");
 var Redis = require("ioredis");
 
+// configuration
+
 var redis = new Redis();
 
 //****************************************
@@ -125,3 +127,29 @@ exports.route = function (res, sRoute) {
 exports.unixInt = function () {
     return Math.floor(Date.now() / 1000);
 };
+
+exports.unixDate = function (iTime) {
+    var iDate = new Date(iTime * 1000);
+    var aMonth = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    var iYear = iDate.getFullYear();
+    var sMonth = aMonth[iDate.getMonth()];
+    var iDay = iDate.getDate();
+    var iHour = iDate.getHours();
+    var iMinute = iDate.getMinutes();
+    var iSecound = iDate.getSeconds();
+    if (iDay < 10) {
+        iDay = "0" + iDay;
+    }
+    if (iHour < 10) {
+        iHour = "0" + iHour;
+    }
+    if (iMinute < 10) {
+        iMinute = "0" + iMinute;
+    }
+    if (iSecound < 10) {
+        iSecound = "0" + iSecound;
+    }
+    var sDate = iDay + ". " + sMonth + " " + iHour + ":" + iMinute + ":" + iSecound;
+    return sDate;
+};
+
