@@ -1,8 +1,7 @@
-"use strict"
+"use strict";
 
 // Module dependencies
 
-var cookies = require("cookies");
 var Redis = require("ioredis");
 
 // configuration
@@ -13,7 +12,7 @@ var redis = new Redis();
 // function
 //****************************************
 
-exports.registerPruf = function (sUser, sEmail , sPasswordI, sPasswordR, bAgb) {   
+exports.registerPruf = function (sUser, sEmail, sPasswordI, sPasswordR, bAgb) {
     if (sUser.length > 0) {
         if (sPasswordI.length > 5) {
             if (sPasswordI.match(/[a-z]/)) {
@@ -47,18 +46,18 @@ exports.registerPruf = function (sUser, sEmail , sPasswordI, sPasswordR, bAgb) {
     } else {
         return "- Benutzername zu kurz -";
     }
-}
+};
 
 exports.login = function (oCookie, oOption) {
     if (oOption.login) {
         var sSessionid = exports.randomString(16, "aA#");
         oCookie.set("MESSENGER", sSessionid, {
             "overwrite": true,
-            "httpOnly": true,
+            "httpOnly": true
         });
         redis.set(sSessionid, oOption.userid);
     }
-}
+};
 
 exports.logout = function (oCookie, oOption) {
     if (oOption.sessionid !== undefined) {
@@ -70,7 +69,7 @@ exports.logout = function (oCookie, oOption) {
         redis.del(oOption.sessionid);
         oCookie.set("MESSENGER");
     }
-}
+};
 
 exports.loggedin = function (oCookie, fCallback) {
     var bReturn = -1;
@@ -81,7 +80,7 @@ exports.loggedin = function (oCookie, fCallback) {
         }
         fCallback(bReturn);
     });
-}
+};
 
 exports.randomString = function (iLength, sChars, oOptions) {
     var sMask = "";
@@ -122,7 +121,7 @@ exports.randomString = function (iLength, sChars, oOptions) {
 
 exports.route = function (res, sRoute) {
     res.redirect(sRoute);
-}
+};
 
 exports.unixInt = function () {
     return Math.floor(Date.now() / 1000);
