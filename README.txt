@@ -6,3 +6,4 @@ editting some shitty stuff
 
 some fixes
 better read me
+döm dööööm
